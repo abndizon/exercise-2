@@ -18,7 +18,7 @@ namespace ExerciseTwo
                 Console.WriteLine("3 - Create New List");
                 Console.WriteLine("4 - Select List");
                 Console.WriteLine("5 - Quit");
-                Console.WriteLine("==============================");
+                Console.WriteLine("===================================");
                 Console.Write("Enter number: ");
 
                 int choice = Convert.ToInt32(Console.ReadLine());
@@ -32,7 +32,7 @@ namespace ExerciseTwo
                         for (int i = 0; i < myLists.Count; i++)
                         {
                             ToDoList tdl = myLists[i];
-                            Console.WriteLine($"======== List ID: {tdl.Id} ========");
+                            Console.WriteLine($"=== List ID: {tdl.Id}");
                             Console.WriteLine($"Name: {tdl.Name}");
                             Console.WriteLine($"Number of items: {tdl.ToDoItems.Count}");
                         }
@@ -65,7 +65,7 @@ namespace ExerciseTwo
                     int id = myLists.Count + 1;
                     ToDoList tdl = new ToDoList(id, listName);
                     myLists.Add(tdl);
-                    Console.WriteLine($"LIST {tdl.Name} CREATED");
+                    Console.WriteLine($"LIST '{tdl.Name}' CREATED");
                 }
                 else if (choice == 4)
                 {
@@ -85,13 +85,13 @@ namespace ExerciseTwo
                         while (displaySecondMenu)
                         {
                             Console.WriteLine("============ LIST MENU ============");
-                            Console.WriteLine($"======== List ID: {tdl.Id} ========");
+                            Console.WriteLine($"=== List ID: {tdl.Id}");
                             Console.WriteLine("What would you like to do to this list?");
                             Console.WriteLine("1 - Display All Items");
                             Console.WriteLine("2 - Create New Item");
                             Console.WriteLine("3 - Delete Item");
                             Console.WriteLine("4 - Update Item");
-                            Console.WriteLine("5  - Go Back");
+                            Console.WriteLine("5 - Go Back");
                             Console.WriteLine("==============================");
                             Console.Write("Enter number: ");
                             int secondMenuChoice = Convert.ToInt32(Console.ReadLine());
@@ -108,7 +108,7 @@ namespace ExerciseTwo
 
                                 TodoItem item = new TodoItem(id, content);
                                 tdl.AddTodoItem(item);
-                                Console.WriteLine($"ITEM {item.Content} CREATED");
+                                Console.WriteLine($"ITEM '{item.Content}' CREATED");
                             }
                             else if (secondMenuChoice == 3)
                             {
@@ -162,7 +162,7 @@ namespace ExerciseTwo
                 Console.WriteLine($"DISPLAYING ITEMS FOR LIST ID {tdl.Id}..");
                 foreach (TodoItem item in tdl.ToDoItems)
                 {
-                    Console.WriteLine($"======== Item ID: {item.Id} ========");
+                    Console.WriteLine($"=== Item ID: {item.Id}");
                     Console.WriteLine($"Content: {item.Content}");
                     Console.WriteLine($"Status: {item.Status}");
                 }
