@@ -22,7 +22,6 @@ namespace ExerciseTwo
                 Console.Write("Enter number: ");
 
                 int choice = Convert.ToInt32(Console.ReadLine());
-                int listId = 0;
 
                 if (choice == 1)
                 {
@@ -43,17 +42,8 @@ namespace ExerciseTwo
                 }
                 else if (choice == 2)
                 {
-                    Console.Write("Enter ID of List: ");
-                    listId = Convert.ToInt32(Console.ReadLine());
-
-                    ToDoList tdl = myLists.SingleOrDefault(x => x.Id == listId);
-
-                    if (tdl == null)
-                    {
-                        Console.WriteLine($"ERROR. List ID {listId} not found.");
-                    }
-                    else
-                    {
+                    ToDoList tdl = FindList(myLists);
+                    if (tdl != null) {
                         ShowItems(tdl);
                     }
                 }
@@ -69,17 +59,8 @@ namespace ExerciseTwo
                 }
                 else if (choice == 4)
                 {
-                    Console.Write("Enter ID of List: ");
-                    listId = Convert.ToInt32(Console.ReadLine());
-
-                    ToDoList tdl = myLists.SingleOrDefault(x => x.Id == listId);
-
-                    if (tdl == null)
-                    {
-                        Console.WriteLine($"ERROR. List ID {listId} not found.");
-                    }
-                    else
-                    {
+                    ToDoList tdl = FindList(myLists);
+                    if (tdl != null) {
                         bool displaySecondMenu = true;
 
                         while (displaySecondMenu)
@@ -183,6 +164,20 @@ namespace ExerciseTwo
             }
 
             return item;
+        }
+
+        public static ToDoList FindList (List<ToDoList> myLists) {
+            Console.Write("Enter ID of List: ");
+            int listId = Convert.ToInt32(Console.ReadLine());
+
+            ToDoList tdl = myLists.SingleOrDefault(x => x.Id == listId);
+
+            if (tdl == null)
+            {
+                Console.WriteLine($"ERROR. List ID {listId} not found.");
+            }
+
+            return tdl;
         }
     }
 }
