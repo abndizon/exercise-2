@@ -1,12 +1,16 @@
 ﻿using ExerciseTwo.Models;
+using ExerciseTwo.Services;
+using ExerciseTwo.Interfaces;
 
 namespace ExerciseTwo
 {
     public class Program
     {
+        public static IToDoListService todoListServiceContext = new TodoListServiceContext();
+        public static ITodoItemService todoItemServiceContext = new TodoItemServiceContext();
         static void Main(string[] args)
         {
-            List<ToDoList> myLists = new List<ToDoList>();
+            List<ToDoList> myLists = todoListServiceContext.GetAll();
             bool displayMenu = true;
 
             while (displayMenu)
@@ -54,13 +58,14 @@ namespace ExerciseTwo
 
                     int id = myLists.Count + 1;
                     ToDoList tdl = new ToDoList(id, listName);
-                    myLists.Add(tdl);
+                    tdl = todoListServiceContext.Save(tdl);
                     Console.WriteLine($"LIST '{tdl.Name}' CREATED");
                 }
                 else if (choice == 4)
                 {
                     ToDoList tdl = FindList(myLists);
-                    if (tdl != null) {
+                    if (tdl != null)
+                    {
                         bool displaySecondMenu = true;
 
                         while (displaySecondMenu)
@@ -88,17 +93,18 @@ namespace ExerciseTwo
                                 int id = tdl.ToDoItems.Count + 1;
 
                                 TodoItem item = new TodoItem(id, content);
-                                tdl.AddTodoItem(item);
+                                item = todoItemServiceContext.Save(tdl.Id, item);
                                 Console.WriteLine($"ITEM '{item.Content}' CREATED");
                             }
                             else if (secondMenuChoice == 3)
                             {
                                 Console.Write("Enter ID of Item to delete: ");
                                 int id = Convert.ToInt32(Console.ReadLine());
+                                TodoItem item = FindItem(tdl, id);
 
-                                if (FindItem(tdl, id) != null)
+                                if (item != null)
                                 {
-                                    tdl.RemoveTodoItem(id);
+                                    todoItemServiceContext.Delete(tdl.Id, item);
                                     Console.WriteLine($"ITEM ID {id} DELETED");
                                 }
                             }
@@ -110,8 +116,12 @@ namespace ExerciseTwo
 
                                 if (item != null)
                                 {
-                                    item.Update();
-                                    Console.WriteLine($"ITEM ID {id} UPDATED");
+                                    if (item.Update()) {
+                                        Console.WriteLine($"ITEM ID {id} UPDATED");
+                                    }
+                                    else {
+                                        Console.WriteLine($"CANNOT UPDATE ITEM ID {id} ");
+                                    }
                                 }
                             }
                             else if (secondMenuChoice == 5)
@@ -136,12 +146,27 @@ namespace ExerciseTwo
             }
         }
 
+        public static ToDoList FindList (List<ToDoList> myLists) {
+            Console.Write("Enter ID of List: ");
+            int listId = Convert.ToInt32(Console.ReadLine());
+
+            ToDoList tdl = todoListServiceContext.FindById(listId);
+
+            if (tdl == null)
+            {
+                Console.WriteLine($"ERROR. List ID {listId} not found.");
+            }
+
+            return tdl;
+        }
+
         public static void ShowItems(ToDoList tdl)
         {
-            if (tdl.ToDoItems.Count > 0)
+            List<TodoItem> todoItems = todoItemServiceContext.GetAll(tdl.Id);
+            if (todoItems.Count > 0)
             {
                 Console.WriteLine($"DISPLAYING ITEMS FOR LIST ID {tdl.Id}..");
-                foreach (TodoItem item in tdl.ToDoItems)
+                foreach (TodoItem item in todoItems)
                 {
                     Console.WriteLine($"=== Item ID: {item.Id}");
                     Console.WriteLine($"Content: {item.Content}");
@@ -156,7 +181,7 @@ namespace ExerciseTwo
 
         public static TodoItem FindItem(ToDoList tdl, int id)
         {
-            TodoItem item = tdl.ToDoItems.SingleOrDefault(x => x.Id == id);
+            TodoItem item = todoItemServiceContext.FindById(tdl.Id, id);
 
             if (item == null)
             {
@@ -164,20 +189,6 @@ namespace ExerciseTwo
             }
 
             return item;
-        }
-
-        public static ToDoList FindList (List<ToDoList> myLists) {
-            Console.Write("Enter ID of List: ");
-            int listId = Convert.ToInt32(Console.ReadLine());
-
-            ToDoList tdl = myLists.SingleOrDefault(x => x.Id == listId);
-
-            if (tdl == null)
-            {
-                Console.WriteLine($"ERROR. List ID {listId} not found.");
-            }
-
-            return tdl;
         }
     }
 }

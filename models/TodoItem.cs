@@ -1,40 +1,30 @@
 namespace ExerciseTwo.Models {
     public class TodoItem {
-        private int id;
-        private string content;
-        private string status;
-
         public int Id {
-            get {
-                return this.id;
-            }
+            get; private set;
         }
 
         public string Content {
-            get {
-                return this.content;
-            }
+            get; private set;
         }
 
         public string Status {
-            get {
-                return this.status;
-            }
+            get; private set;
         }
 
         public TodoItem(int id, string content) {
-            this.id = id;
-            this.content = content;
-            this.status = "pending";
+            Id = id;
+            Content = content;
+            Status = "pending";
         }
 
         public bool Update() {
-            if (status == "pending") {
-                status = "active";
+            if (Status == "pending") {
+                Status = "active";
                 return true;
             }
-            else if (status == "active") {
-                status = "done";
+            else if (Status == "active") {
+                Status = "done";
                 return true;
             }
             else {

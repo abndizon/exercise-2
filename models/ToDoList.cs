@@ -1,41 +1,31 @@
 namespace ExerciseTwo.Models {
     public class ToDoList {
-        private int id;
-        private string name;
-        private List<TodoItem> todoItems;
-
         public int Id {
-            get {
-                return this.id;
-            }
+            get; private set;
         }
 
         public string Name {
-            get {
-                return this.name;
-            }
+           get; private set;
         }
 
         public List<TodoItem> ToDoItems {
-            get {
-                return this.todoItems;
-            }
+            get; private set;
         }
 
         public ToDoList(int id, string name) {
-            this.id = id;
-            this.name = name;
+            Id = id;
+            Name = name;
 
-            todoItems = new List<TodoItem>();
+            ToDoItems = new List<TodoItem>();
         }
 
         public void AddTodoItem(TodoItem item) {
-            todoItems.Add(item);
+            ToDoItems.Add(item);
         }
 
         public void RemoveTodoItem(int id) {
-            TodoItem toDoMatch = todoItems.Single(x => x.Id == id);
-            todoItems.Remove(toDoMatch);
+            TodoItem toDoMatch = ToDoItems.Single(x => x.Id == id);
+            ToDoItems.Remove(toDoMatch);
         }
     }
 }
